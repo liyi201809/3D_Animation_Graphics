@@ -37,6 +37,8 @@ std::vector<unsigned int> MeshTriangles;
 //Declare your own global variables here:
 int myVariableThatServesNoPurpose;
 
+float anim_x = 0.f;
+
 
 ////////// Draw Functions
 
@@ -71,6 +73,7 @@ void drawCoordSystem(float length=1)
 /**
  * Several drawing functions for you to work on
 */
+float x0 = 0;
 
 void drawTriangle()
 {
@@ -83,12 +86,12 @@ void drawTriangle()
 	//5) go to the function animate and increment this variable
 	//by a small value - observe the animation.
 
-	glColor3f(1,1,1);
-	glNormal3f(0,0,1);
 	glBegin(GL_TRIANGLES);
-		glVertex3f(0,0,0);
-		glVertex3f(1,0,0);
-		glVertex3f(1,1,0);
+		glColor3f(1, 0, 0);
+		glNormal3f(0, 0, 1);
+		glVertex3f(anim_x, 0, 0);
+		glVertex3f(0, 0, 0);
+		glVertex3f(0, 1, 0);
 	glEnd();
 }
 
@@ -98,7 +101,16 @@ void drawUnitFace()
 	//1) draw a unit quad in the x,y plane oriented along the z axis
 	//2) make sure the orientation of the vertices is positive (counterclock wise)
 	//3) What happens if the order is inversed?
+	glBegin(GL_QUADS);
+	glColor3f(0, 1, 0);
+	glNormal3f(0.0, 0.0, 1.0);
+	glVertex2f(0.0, 0.0);
+	glVertex2f(1.0, 0.0);
+	glVertex2f(1.0, 1.0);
+	glVertex2f(0.0, 1.0);
+	glEnd();
 }
+
 
 void drawUnitCube()
 {
@@ -108,8 +120,42 @@ void drawUnitCube()
 	//glPushMatrix stores the current matrix and puts a copy on
 	//the top of a stack.
 	//glPopMatrix pops the top matrix on the stack
+	
+	drawUnitFace();
+	glPushMatrix();
+	glTranslatef(1.0, 0.0, 0.0);
+	glRotated(-90, 0.0, 1.0, 0.0);
+	drawUnitFace();
 
+	glTranslatef(1.0, 0.0, 0.0);
+	glRotated(-90, 0.0, 1.0, 0.0);
+	drawUnitFace();
+
+	glPopMatrix();
+	glTranslatef(0.0, 1.0, 0.0);
+	glRotated(90, 1.0, 0.0, 0.0);
+	drawUnitFace();
 }
+
+/////// for the rotating ARM //////////////////////////////////////////////////////////////////////////////////// 
+static int Angle1 = 0, Angle2 = 0, Angle3 =0;
+void wireBox(GLdouble width, GLdouble height, GLdouble depth) {
+	glPushMatrix();
+	glScalef(width, height, depth);
+	glutWireCube(0.5);
+	glPopMatrix();
+}
+void special(int key, int, int) {
+	switch (key) {
+	case GLUT_KEY_LEFT: (Angle2 += 5) %= 360; break;
+	case GLUT_KEY_RIGHT: (Angle2 -= 5) %= 360; break;
+	case GLUT_KEY_UP: (Angle3 += 5) %= 360; break;
+	case GLUT_KEY_DOWN: (Angle3 -= 5) %= 360; break;
+	default: return;
+	}
+	glutPostRedisplay();
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void drawArm()
 {
@@ -125,8 +171,24 @@ void drawArm()
 
 	//3 optional) make an animated snake out of these boxes
 	//(an arm with 10 joints that moves using the animate function)
-}
+	glRotatef((GLfloat)Angle1, 0.0, 0.0, 1.0);
+	glTranslatef(0.5, 0.0, 0.0);
+	wireBox(2.0, 0.4, 1.0);
 
+	glTranslatef(0.5, 0.0, 0.0);
+	glRotatef((GLfloat)Angle2, 0.0, 0.0, 1.0);
+	glTranslatef(0.5, 0.0, 0.0);
+	wireBox(2.0, 0.4, 1.0);
+
+	glTranslatef(0.5, 0.0, 0.0);
+	glRotatef((GLfloat)Angle3, 0.0, 0.0, 1.0);
+	glTranslatef(0.5, 0.0, 0.0);
+	wireBox(2.0, 0.4, 1.0);
+
+	glPopMatrix();
+	glFlush();
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void drawLight()
 {
 	//1) use glutSolidSphere to draw a sphere at the light's position LightPos
@@ -139,7 +201,15 @@ void drawLight()
 	//3) add normal information to all your faces of the previous functions
 	//and observe the shading after pressing 'L' to activate the lighting
 	//you can use 'l' to turn it off again
+	glPushAttrib(GL_ALL_ATTRIB_BITS);
+	//deactivate the lighting state
+	glDisable(GL_LIGHTING);
 
+	glTranslatef(LightPos[0], LightPos[1], LightPos[2]);
+	glColor3f(1, 1, 0);
+	glutSolidSphere(LightPos[3]/10, 16, 16);
+
+	glPopAttrib();
 }
 
 
@@ -157,7 +227,33 @@ void drawMesh()
 	// What do you observe with respect to the lighting?
 
 	//4) try loading your own model (export it from Blender as a Wavefront obj) and replace the provided mesh file.
+	
+	glBegin(GL_TRIANGLES);  // putting this line outside the for loop improves the speed
+	for (int i = 0; i<MeshTriangles.size(); i=i+3 ) {
+			
+		    glColor3f(1, 0, 0);
+			std::vector<float> v1{ MeshVertices[MeshTriangles[i] * 3], MeshVertices[MeshTriangles[i] * 3 + 1] , MeshVertices[MeshTriangles[i] * 3 + 2] };
+			std::vector<float> v2{ MeshVertices[MeshTriangles[i + 1] * 3] ,MeshVertices[MeshTriangles[i + 1] * 3 + 1], MeshVertices[MeshTriangles[i + 1] * 3 + 2] };
+			std::vector<float> v3{ MeshVertices[MeshTriangles[i + 2] * 3] ,MeshVertices[MeshTriangles[i + 2] * 3 + 1], MeshVertices[MeshTriangles[i + 2] * 3 + 2] };
 
+			std::vector<float> v4{v2[0] - v1[0], v2[1] - v1[1], v2[2] - v1[2]};  //two edges of each triangle
+			std::vector<float> v5{v3[0] - v1[0], v3[1] - v1[1], v3[2] - v1[2]};
+
+			std::vector<float> v6;
+			v6.push_back(v4[1] * v5[2] - v4[2] * v5[1]);  // calculate the cross products
+			v6.push_back(v4[0] * v5[2] - v4[2] * v5[0]);
+			v6.push_back(v4[0] * v5[1] - v4[1] * v5[0]);
+
+			glNormal3f(v6[0], v6[1], v6[2]);
+
+			glVertex3f(v1[0], v1[1], v1[2]);
+			glVertex3f(v2[0], v2[1], v2[2]);
+			glVertex3f(v3[0], v3[1], v3[2]);
+			//glVertex3f(MeshVertices[MeshTriangles[i]*3], MeshVertices[MeshTriangles[i]*3+1], MeshVertices[MeshTriangles[i]*3 + 2]);
+			/*glVertex3f(MeshVertices[MeshTriangles[i+1] * 3], MeshVertices[MeshTriangles[i+1] * 3 + 1], MeshVertices[MeshTriangles[i+1] * 3 + 2]);
+			glVertex3f(MeshVertices[MeshTriangles[i+2] * 3], MeshVertices[MeshTriangles[i+2] * 3 + 1], MeshVertices[MeshTriangles[i+2] * 3 + 2]);*/
+	}
+	glEnd();
 }
 
 
@@ -170,14 +266,26 @@ void display( )
 	switch( DisplayMode )
 	{
 	case TRIANGLE:
-		drawMesh();
+		//drawMesh();
 		drawCoordSystem();
 		drawTriangle();
 		break;
 	case FACE:
+		drawCoordSystem();
 		drawUnitFace();
 		break;
-	//...
+	case CUBE: 
+		drawCoordSystem();
+		drawUnitCube();
+		break;
+	case ARM:
+		drawCoordSystem();
+		drawArm();
+		break;
+	case MESH:
+		drawCoordSystem();
+		drawMesh();
+		break;
 
 	default:
 
@@ -185,12 +293,18 @@ void display( )
 	}
 }
 
-
+int determm = 0;
 /**
  * Animation
  */
 void animate( )
-{
+{   
+	// for the triangle uses
+	if (anim_x <= 3)
+	{
+		anim_x += 0.001f;
+	}	
+	// for rotating arms
 
 }
 
@@ -217,6 +331,13 @@ void keyboard(unsigned char key, int x, int y)
 	case 'l':
 		//turn lighting off
 		glDisable(GL_LIGHTING);
+		break;
+    // controlling the rotation angles of arm
+	case 'n':
+		(Angle1 += 5) %= 360;
+		break;
+	case 'm':
+		(Angle1 -= 5) %= 360;
 		break;
     }
 }
@@ -460,7 +581,7 @@ int main(int argc, char** argv)
     tbInitTransform();
     tbHelp();
 
-
+	glutSpecialFunc(special);
 
 	// Hook up the callbacks
     glutReshapeFunc(reshape);
