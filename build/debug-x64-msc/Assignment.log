@@ -1,0 +1,3 @@
+﻿  main.cpp
+c:\users\yi\desktop\tud\3d_computer_graphics\practical01\main.cpp(33): warning C4305: 'initializing': truncation from 'double' to 'float'
+  Assignment.vcxproj -> C:\Users\YI\Desktop\TUD\3D_computer_graphics\Practical01\build\..\bin\Assignment-debug-x64-msc.exe
