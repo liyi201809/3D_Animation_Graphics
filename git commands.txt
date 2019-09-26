@@ -1,0 +1,16 @@
+This file recordes the procedure from cloning an existing Repo on git to push the local changes.
+
+go to local parent folder,
+git init
+git clone SSH
+then go to cloned folder, edit files & changes
+git add *
+git commit -m ""
+git push
+
+switch branches,
+git checkout
+git brach develop
+git add *
+git commit -m ""
+git push --set-upstream origin develop
