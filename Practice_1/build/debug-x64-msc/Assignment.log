@@ -1,4 +1,5 @@
 ﻿  main.cpp
-c:\users\yi\desktop\tud\3d_computer_graphics\practical01\main.cpp(33): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\yi\desktop\tud\3d_computer_graphics\practical01\main.cpp(144): warning C4244: 'argument': conversion from 'GLdouble' to 'GLfloat', possible loss of data
-  Assignment.vcxproj -> C:\Users\YI\Desktop\TUD\3D_computer_graphics\Practical01\build\..\bin\Assignment-debug-x64-msc.exe
+c:\users\yi\desktop\tud\3d_animation\practice_1\main.cpp(29): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\yi\desktop\tud\3d_animation\practice_1\main.cpp(136): warning C4244: 'argument': conversion from 'GLdouble' to 'GLfloat', possible loss of data
+  LINK : ..\bin\Assignment-debug-x64-msc.exe not found or not built by the last incremental link; performing full link
+  Assignment.vcxproj -> C:\Users\YI\Desktop\TUD\3D_Animation\Practice_1\build\..\bin\Assignment-debug-x64-msc.exe

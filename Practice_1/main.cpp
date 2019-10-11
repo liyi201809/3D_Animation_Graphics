@@ -6,17 +6,13 @@
 #include <cassert>
 #include <cstdlib>
 #include <cstring>
-
 #include <vector>
 #include <iostream>
-
 #include <GL/glut.h>
-
 #include "mouse.h"
 //#include "argumentParser.h"
 
 //START READING HERE!!!
-
 
 //////Predefined global variables
 
@@ -36,9 +32,7 @@ std::vector<unsigned int> MeshTriangles;
 
 //Declare your own global variables here:
 int myVariableThatServesNoPurpose;
-
 float anim_x = 0.f;
-
 
 ////////// Draw Functions
 
@@ -46,7 +40,6 @@ float anim_x = 0.f;
 void drawCoordSystem(float length=1)
 {
 	//draw simply colored axes
-
 	//remember all states of the GPU
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 	//deactivate the lighting state
@@ -65,7 +58,6 @@ void drawCoordSystem(float length=1)
 		glVertex3f(0,0,0);
 		glVertex3f(0,0,length);
 	glEnd();
-
 	//reset to previous state
 	glPopAttrib();
 }
@@ -156,7 +148,6 @@ void special(int key, int, int) {
 	glutPostRedisplay();
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void drawArm()
 {
 	//produce a three-unit arm (upperarm, forearm, hand) making use of your
@@ -342,15 +333,11 @@ void keyboard(unsigned char key, int x, int y)
     }
 }
 
-
-
-
 //Nothing needed below this point
 //STOP READING //STOP READING //STOP READING
 //STOP READING //STOP READING //STOP READING
 //STOP READING //STOP READING //STOP READING
 //STOP READING //STOP READING //STOP READING
-
 
 void displayInternal(void);
 void reshape(int w, int h);
@@ -366,10 +353,8 @@ void init()
  //   glMaterialiv(GL_FRONT_AND_BACK,GL_SPECULAR,MatSpec);
  //   glMateriali(GL_FRONT_AND_BACK,GL_SHININESS,10);
 
-
     // Enable Depth test
     glEnable( GL_DEPTH_TEST );
-
 	//glEnable(GL_CULL_FACE);
     //glCullFace(GL_BACK);
 	//Draw frontfacing polygons as filled
@@ -390,7 +375,6 @@ void centerAndScaleToUnit (std::vector<float> & vertices)
 		std::cout << "ERROR while loading!!!\n";
 		return;
 	}
-
 	float x=0;
 	float y=0;
 	float z=0;
@@ -400,7 +384,6 @@ void centerAndScaleToUnit (std::vector<float> & vertices)
         y += vertices[i+1];
         z += vertices[i+2];
 	}
-
 
 	x /= vertices.size ()/3;
 	y /= vertices.size ()/3;
@@ -442,8 +425,6 @@ bool loadMesh(const char * filename)
 	//temp stuff
     float x, y, z;
     std::vector<int> vhandles;
-
-
 
     while(in && !feof(in) && fgets(s, LINE_LEN, in))
     {
@@ -555,8 +536,6 @@ bool loadMesh(const char * filename)
     centerAndScaleToUnit (MeshVertices);
 	return true;
 }
-
-
 
 
 // Program entry point. Everything starts here.

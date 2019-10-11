@@ -13,4 +13,9 @@ git checkout
 git brach develop
 git add *
 git commit -m ""
-git push --set-upstream origin develop
+git push --set-upstream origin develop 
+...
+git push
+...
+git push
+...
